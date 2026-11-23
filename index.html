@@ -69,6 +69,7 @@
         <a href="#album">Álbum</a>
         <a href="#motivos">100 motivos</a>
         <a href="#contador">Contador</a>
+        <a href="#jogo">Jogo 🎮</a>
         <a href="#cartas">Cartinhas</a>
         <a href="#natal">Natal 💚</a>
       </nav>
@@ -179,6 +180,38 @@
           <div class="unit tilt"><span class="unit__num" id="cSeg">00</span><span class="unit__label">Segundos</span></div>
         </div>
         <p class="counter__extra">Isso dá mais de <strong id="cBeats">0</strong> batidas do meu coração por você.</p>
+      </section>
+
+      <!-- ======================= JOGO DA MEMÓRIA 🎮 ======================= -->
+      <section id="jogo" class="section">
+        <header class="section-head">
+          <p class="eyebrow">Hora de brincar</p>
+          <h2 class="section-title">Jogo da <em>memória</em></h2>
+          <p class="section-lead">Giovanna, encontre os pares das nossas fotos. Tem prêmio no final 😘</p>
+        </header>
+        <div class="game">
+          <div class="game__hud">
+            <span>Jogadas <strong id="gMoves">0</strong></span>
+            <span>Pares <strong id="gPairs">0</strong>/<b id="gTotal">8</b></span>
+            <span>Tempo <strong id="gTime">0:00</strong></span>
+          </div>
+          <div class="game__wrap">
+            <div class="game__board" id="gBoard"></div>
+            <div class="game__burst" id="gBurst" aria-hidden="true"></div>
+            <div class="game__win" id="gWin" hidden>
+              <div class="game__win-card">
+                <p class="eyebrow">Você ganhou!</p>
+                <h3>Parabéns, Giovanna! 🎉</h3>
+                <p id="gWinText"></p>
+                <p class="game__prize" id="gPrize"></p>
+                <small>Mostre esta tela para o Cristian para resgatar 😉</small>
+                <button class="btn btn--primary btn--sm" id="gAgain" type="button">Jogar de novo</button>
+              </div>
+            </div>
+          </div>
+          <p class="game__best" id="gBest"></p>
+          <div class="center"><button class="btn btn--ghost btn--sm" id="gRestart" type="button">Embaralhar de novo</button></div>
+        </div>
       </section>
 
       <!-- ======================= 7. CARTINHAS ======================= -->

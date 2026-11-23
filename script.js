@@ -223,6 +223,13 @@ const CONFIG = {
     },
   ],
 
+  /* ---------- Jogo da memória ---------- */
+  JOGO: {
+    // fotos usadas nas cartas (cada uma vira um par)
+    fotos: ['fotos/nos-1.jpg', 'fotos/giovanna-1.jpg', 'fotos/juntinhos-1.jpg', 'fotos/nos-2.jpg', 'fotos/cristian-ursinho.jpg', 'fotos/nos-3.jpg', 'fotos/giovanna-2.jpg', 'fotos/nos-4.jpg'],
+    premio: 'Vale um beijo bem demorado do Cristian 😘',
+  },
+
   /* ---------- Cantinho de Natal da Giovanna 💚 ---------- */
   // Ela ama o Grinch: coloque aqui uma foto de vocês ou de algo dela com o tema
   // (ex: 'fotos/grinch.jpg'). Se ficar vazio, aparece uma moldura natalina.
@@ -972,14 +979,14 @@ function initMotivos() {
     let html = '';
     for (let i = shown; i < end; i++) {
       html += `
-        <button class="reason${flipped.has(i) ? ' is-flipped' : ''}" type="button" data-i="${i}" style="--k:${i - shown}" aria-pressed="${flipped.has(i)}">
+        <div class="reason${flipped.has(i) ? ' is-flipped' : ''}" role="button" tabindex="0" data-i="${i}" style="--k:${i - shown}" aria-pressed="${flipped.has(i)}" aria-label="Motivo ${i + 1}">
           <span class="reason__inner">
             <span class="reason__face reason__front">
               <span class="reason__num">Nº ${pad(i + 1)}</span>${heartSVG()}<span class="reason__hint">toque para revelar</span>
             </span>
-            <span class="reason__face reason__back">${heartSVG()}<p>${esc(motivos[i])}</p></span>
+            <span class="reason__face reason__back">${heartSVG()}<span class="reason__text">${esc(motivos[i])}</span></span>
           </span>
-        </button>`;
+        </div>`;
     }
     grid.insertAdjacentHTML('beforeend', html);
     shown = end;
@@ -999,6 +1006,10 @@ function initMotivos() {
   }
 
   grid.addEventListener('click', e => { const c = e.target.closest('.reason'); if (c) flip(c); });
+  grid.addEventListener('keydown', e => {
+    const c = e.target.closest('.reason');
+    if (c && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); flip(c); }
+  });
   more.addEventListener('click', addMore);
   $('#reasonRandom').addEventListener('click', () => {
     const left = motivos.map((_, i) => i).filter(i => !flipped.has(i));
@@ -1360,7 +1371,7 @@ const Surprise = (() => {
    NAVEGAÇÃO + PROGRESSO (destrava a surpresa ao visitar todas as seções)
    ========================================================================== */
 function initProgress() {
-  const ids = ['historia', 'momentos', 'album', 'motivos', 'contador', 'cartas', 'natal'];
+  const ids = ['historia', 'momentos', 'album', 'motivos', 'contador', 'jogo', 'cartas', 'natal'];
   const visited = new Set(store.get('visitados', []).filter(id => ids.includes(id)));
   const hearts = $('#progressHearts');
   const links = $$('#navLinks a');
@@ -1408,6 +1419,112 @@ function initProgress() {
 }
 
 /* ==========================================================================
+   JOGO DA MEMÓRIA 🎮
+   ========================================================================== */
+function initJogo() {
+  const cfg = CONFIG.JOGO || {};
+  const fotos = (cfg.fotos || []).slice(0, 8);
+  if (fotos.length < 2) { $('#jogo').hidden = true; return; }
+  const board = $('#gBoard'), win = $('#gWin');
+  const el = { moves: $('#gMoves'), pairs: $('#gPairs'), time: $('#gTime') };
+  $('#gTotal').textContent = fotos.length;
+  $('#gPrize').textContent = cfg.premio || '';
+  board.style.setProperty('--cols', fotos.length > 6 ? 4 : 3);
+
+  let first = null, lock = false, moves = 0, pairs = 0, secs = 0, timer = 0;
+  const fmt = n => `${Math.floor(n / 60)}:${pad(n % 60)}`;
+  const showBest = () => {
+    const best = store.get('jogoRecorde', null);
+    $('#gBest').textContent = best ? `Seu recorde: ${best.moves} jogadas em ${fmt(best.secs)} 🏆` : '';
+  };
+
+  function shuffle(a) {
+    for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; }
+    return a;
+  }
+
+  function start() {
+    clearInterval(timer);
+    first = null; lock = false; moves = 0; pairs = 0; secs = 0; timer = 0;
+    el.moves.textContent = 0; el.pairs.textContent = 0; el.time.textContent = '0:00';
+    win.hidden = true;
+    const deck = shuffle(fotos.flatMap((src, id) => [{ src, id }, { src, id }]));
+    board.innerHTML = deck.map((c, i) => `
+      <div class="mem" role="button" tabindex="0" data-id="${c.id}" aria-label="Carta ${i + 1}" style="--k:${i}">
+        <span class="mem__inner">
+          <span class="mem__face mem__front">${heartSVG()}</span>
+          <span class="mem__face mem__back"><img src="${esc(c.src)}" alt="" draggable="false"></span>
+        </span>
+      </div>`).join('');
+    showBest();
+  }
+
+  function celebrate() {
+    clearInterval(timer);
+    const best = store.get('jogoRecorde', null);
+    const isRecord = !best || moves < best.moves || (moves === best.moves && secs < best.secs);
+    if (isRecord) store.set('jogoRecorde', { moves, secs });
+    $('#gWinText').textContent = `Você encontrou todos os pares em ${moves} jogadas e ${fmt(secs)}${isRecord && best ? ' — novo recorde! 🏆' : '.'}`;
+    showBest();
+    win.hidden = false;
+    // chuva de corações sobre o tabuleiro
+    const burst = $('#gBurst');
+    burst.innerHTML = '';
+    if (!reduceMotion) {
+      for (let i = 0; i < 36; i++) {
+        const h = document.createElement('span');
+        const ang = Math.random() * Math.PI * 2, d = rnd(120, 320);
+        h.className = 'burst-heart';
+        h.style.setProperty('--s', rnd(12, 30).toFixed(0) + 'px');
+        h.style.setProperty('--tx', (Math.cos(ang) * d).toFixed(0) + 'px');
+        h.style.setProperty('--ty', (Math.sin(ang) * d).toFixed(0) + 'px');
+        h.style.setProperty('--dur', rnd(1.4, 2.6).toFixed(2) + 's');
+        h.style.setProperty('--spin', rnd(1, 2.5).toFixed(1) + 's');
+        h.style.setProperty('--c', pick(['#e0567c', '#f7c6d4', '#c9b6e4', '#ffffff']));
+        h.innerHTML = heartSVG();
+        burst.appendChild(h);
+      }
+    }
+  }
+
+  function flipCard(card) {
+    if (lock || card === first || card.classList.contains('is-flipped')) return;
+    if (!timer) timer = setInterval(() => { secs++; el.time.textContent = fmt(secs); }, 1000);
+    card.classList.add('is-flipped');
+    if (!first) { first = card; return; }
+
+    moves++;
+    el.moves.textContent = moves;
+    const a = first, b = card;
+    first = null;
+    if (a.dataset.id === b.dataset.id) {
+      a.classList.add('is-matched'); b.classList.add('is-matched');
+      pairs++;
+      el.pairs.textContent = pairs;
+      if (pairs === fotos.length) setTimeout(celebrate, 600);
+    } else {
+      lock = true;
+      setTimeout(() => {
+        a.classList.add('is-wrong'); b.classList.add('is-wrong');
+        setTimeout(() => {
+          a.classList.remove('is-flipped', 'is-wrong'); b.classList.remove('is-flipped', 'is-wrong');
+          lock = false;
+        }, 350);
+      }, 650);
+    }
+  }
+
+  board.addEventListener('click', e => { const c = e.target.closest('.mem'); if (c) flipCard(c); });
+  board.addEventListener('keydown', e => {
+    const c = e.target.closest('.mem');
+    if (c && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); flipCard(c); }
+  });
+  $('#gRestart').addEventListener('click', start);
+  $('#gAgain').addEventListener('click', start);
+  start();
+}
+
+/* ==========================================================================
    CANTINHO DE NATAL 💚
    ========================================================================== */
 function initNatal() {
@@ -1443,6 +1560,7 @@ function startApp() {
   initMotivos();
   initCounter();
   initCartas();
+  initJogo();
   initNatal();
   initProgress();
   observeReveal(document);
