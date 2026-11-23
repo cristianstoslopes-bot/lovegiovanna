@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Nosso Universo — Para Giovanna ❤️</title>
+  <meta name="description" content="Um lugar especial, onde cada detalhe conta um pouquinho da nossa história.">
+  <meta name="theme-color" content="#0e050c">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@500;700&family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="is-locked">
+
+  <!-- Universo 3D de corações e estrelas (canvas de fundo) -->
+  <canvas id="universe" aria-hidden="true"></canvas>
+
+  <!-- ======================= 1. TELA DE LOGIN ======================= -->
+  <section id="login" class="login" aria-label="Entrada">
+    <div class="login__card">
+      <div class="heart3d" data-heart3d aria-hidden="true"></div>
+      <p class="eyebrow">Para Giovanna, com amor</p>
+      <h1 class="login__phrase">“Giovanna, preparei um lugar especial, onde cada detalhe conta um pouquinho da nossa história.”</h1>
+
+      <form id="loginForm" class="login__form" autocomplete="off" novalidate>
+        <label for="senha" class="login__label">Digite a nossa data mágica</label>
+        <div class="login__field">
+          <input id="senha" name="senha" type="text" inputmode="numeric" placeholder="dd/mm/aaaa" maxlength="10" autocomplete="off" spellcheck="false">
+          <button type="submit" class="login__submit" aria-label="Entrar">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h13M13 6l6 6-6 6"/></svg>
+          </button>
+        </div>
+        <p id="loginMsg" class="login__msg" role="alert" aria-live="polite"></p>
+      </form>
+    </div>
+  </section>
+
+  <!-- Abertura romântica (depois da senha certa) -->
+  <div id="intro" class="intro" hidden aria-live="polite">
+    <div class="intro__glow" aria-hidden="true"></div>
+    <div class="intro__burst" id="introBurst" aria-hidden="true"></div>
+    <div class="intro__stage">
+      <div class="heart3d intro__heart" data-heart3d aria-hidden="true"></div>
+      <p class="intro__line" id="introLine"></p>
+      <div class="intro__music" id="introMusic" hidden>
+        <span class="eq" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+        <span id="introMusicText">Tocando agora</span>
+      </div>
+    </div>
+    <button class="intro__skip" id="introSkip" type="button">Toque para pular ›</button>
+  </div>
+
+  <!-- Véu da transição cinematográfica -->
+  <div id="veil" class="veil" aria-hidden="true"></div>
+
+  <!-- ======================= APLICAÇÃO ======================= -->
+  <div id="app" class="app" hidden>
+
+    <header class="nav" id="nav">
+      <a href="#home" class="nav__brand" aria-label="Início">
+        <span>Para Giovanna</span>
+        <svg viewBox="0 0 100 92" aria-hidden="true"><path d="M50 88C22 68 4 50 4 30 4 15 15 4 29 4c9 0 16 5 21 12 5-7 12-12 21-12 14 0 25 11 25 26 0 20-18 38-46 58z"/></svg>
+      </a>
+      <nav class="nav__links" id="navLinks" aria-label="Seções">
+        <a href="#home">Início</a>
+        <a href="#historia">Nossa história</a>
+        <a href="#momentos">Momentos</a>
+        <a href="#album">Álbum</a>
+        <a href="#motivos">100 motivos</a>
+        <a href="#contador">Contador</a>
+        <a href="#cartas">Cartinhas</a>
+        <a href="#natal">Natal 💚</a>
+      </nav>
+      <button class="nav__secret" id="secretBtn" type="button" aria-label="Abrir surpresa" title="Psiu…">
+        <svg viewBox="0 0 100 92" aria-hidden="true"><path d="M50 88C22 68 4 50 4 30 4 15 15 4 29 4c9 0 16 5 21 12 5-7 12-12 21-12 14 0 25 11 25 26 0 20-18 38-46 58z"/></svg>
+      </button>
+    </header>
+
+    <main>
+      <!-- ======================= 2. HOME ======================= -->
+      <section id="home" class="section hero">
+        <div class="hero__text">
+          <p class="eyebrow enter" style="--d:0" id="heroSince">Desde 23 de setembro de 2023</p>
+          <h1 class="hero__title enter" style="--d:1">Bem-vinda ao nosso <em>universo</em>, meu amor</h1>
+          <p class="hero__name enter" style="--d:2">Giovanna, este site é todinho seu. <span>— Cristian</span></p>
+          <p class="hero__lead enter" style="--d:3" id="heroDeclaracao"></p>
+          <button class="btn btn--primary enter" style="--d:4" id="exploreBtn" type="button">
+            Explorar nossas memórias
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M6 13l6 6 6-6"/></svg>
+          </button>
+        </div>
+
+        <div class="hero__visual enter" style="--d:1">
+          <div class="orbit" aria-hidden="true"><span></span><span></span><span></span></div>
+          <div class="hero__float">
+            <figure class="hero__frame tilt" id="heroFrame">
+              <!-- 📷 FOTO PRINCIPAL: troque em CONFIG.FOTO_PRINCIPAL (script.js) -->
+              <img id="heroImg" alt="Foto do casal">
+              <figcaption id="heroCaption"></figcaption>
+            </figure>
+          </div>
+          <div class="heart3d hero__heart" data-heart3d aria-hidden="true"></div>
+        </div>
+      </section>
+
+      <!-- ======================= 3. NOSSA HISTÓRIA ======================= -->
+      <section id="historia" class="section">
+        <header class="section-head">
+          <p class="eyebrow">Capítulo por capítulo</p>
+          <h2 class="section-title">Nossa <em>história</em></h2>
+          <p class="section-lead">Giovanna, cada data aqui é um pedacinho do caminho que nos trouxe até hoje.</p>
+        </header>
+        <ol class="timeline" id="timelineList"></ol>
+      </section>
+
+      <!-- ======================= MOMENTOS (leque 3D) ======================= -->
+      <section id="momentos" class="section fan-section">
+        <header class="section-head">
+          <p class="eyebrow">Um leque de lembranças</p>
+          <h2 class="section-title">Nossos <em>momentos</em></h2>
+          <p class="section-lead">Deslize ou use as setas. Toque na foto do centro para ampliar.</p>
+        </header>
+        <div class="fan" id="fan">
+          <div class="fan-layout"></div>
+          <div class="fan-nav" hidden>
+            <button class="icon-btn" type="button" data-fan="prev" aria-label="Anterior">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="15 18 9 12 15 6"/></svg>
+            </button>
+            <div class="dots" data-fan-dots></div>
+            <button class="icon-btn" type="button" data-fan="next" aria-label="Próximo">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg>
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- ======================= 4. ÁLBUM POLAROID ======================= -->
+      <section id="album" class="section">
+        <header class="section-head">
+          <p class="eyebrow">Revelado com carinho</p>
+          <h2 class="section-title">Nosso <em>álbum</em></h2>
+          <p class="section-lead">Nossas fotos e vídeos, Giovanna. Toque para ver de pertinho (os vídeos têm som ♪).</p>
+        </header>
+        <div class="album" id="albumGrid"></div>
+      </section>
+
+      <!-- ======================= 5. 100 MOTIVOS ======================= -->
+      <section id="motivos" class="section">
+        <header class="section-head">
+          <p class="eyebrow">Uma lista que nunca termina</p>
+          <h2 class="section-title"><span id="motivosTotal">100</span> motivos para <em>te amar</em></h2>
+          <p class="section-lead">Giovanna, toque em cada cartão para descobrir por que eu te amo.</p>
+        </header>
+        <div class="reasons-tools">
+          <div class="reasons-progress">
+            <p><strong id="reasonsCount">0</strong> de <span id="reasonsTotal">100</span> descobertos</p>
+            <div class="bar"><i id="reasonsBar"></i></div>
+          </div>
+          <button class="btn btn--ghost btn--sm" id="reasonRandom" type="button">Surpreenda-me ✦</button>
+        </div>
+        <div class="reasons" id="motivosGrid"></div>
+        <div class="center">
+          <button class="btn btn--ghost" id="reasonsMore" type="button">Mostrar mais motivos</button>
+        </div>
+      </section>
+
+      <!-- ======================= 6. CONTADOR ======================= -->
+      <section id="contador" class="section">
+        <header class="section-head">
+          <p class="eyebrow">Cada segundo conta</p>
+          <h2 class="section-title">Nosso <em>tempo</em> juntos</h2>
+          <p class="section-lead" id="counterSince"></p>
+        </header>
+        <div class="counter" role="timer">
+          <div class="unit tilt"><span class="unit__num" id="cDias">0</span><span class="unit__label">Dias</span></div>
+          <div class="unit tilt"><span class="unit__num" id="cHoras">00</span><span class="unit__label">Horas</span></div>
+          <div class="unit tilt"><span class="unit__num" id="cMin">00</span><span class="unit__label">Minutos</span></div>
+          <div class="unit tilt"><span class="unit__num" id="cSeg">00</span><span class="unit__label">Segundos</span></div>
+        </div>
+        <p class="counter__extra">Isso dá mais de <strong id="cBeats">0</strong> batidas do meu coração por você.</p>
+      </section>
+
+      <!-- ======================= 7. CARTINHAS ======================= -->
+      <section id="cartas" class="section">
+        <header class="section-head">
+          <p class="eyebrow">Palavras guardadas</p>
+          <h2 class="section-title">Cartinhas de <em>amor</em></h2>
+          <p class="section-lead">Escritas por Cristian, só para a Giovanna. Toque no envelope para abrir.</p>
+        </header>
+
+        <div class="letters">
+          <div class="env-stage" id="envStage">
+            <button class="envelope" id="envelope" type="button" aria-label="Abrir carta">
+              <span class="env__back"></span>
+              <span class="env__letter"><span class="env__letter-title" id="envLetterTitle"></span><span class="env__lines"></span></span>
+              <span class="env__front"></span>
+              <span class="env__flap"></span>
+              <span class="env__seal"><svg viewBox="0 0 100 92" aria-hidden="true"><path d="M50 88C22 68 4 50 4 30 4 15 15 4 29 4c9 0 16 5 21 12 5-7 12-12 21-12 14 0 25 11 25 26 0 20-18 38-46 58z"/></svg></span>
+            </button>
+            <p class="env__meta"><span id="envCount"></span> · <span id="envStatus"></span></p>
+          </div>
+
+          <article class="letter" id="letter" hidden>
+            <button class="letter__close" id="letterClose" type="button" aria-label="Fechar carta">×</button>
+            <p class="letter__date" id="letterDate"></p>
+            <h3 class="letter__title" id="letterTitle"></h3>
+            <div class="letter__body" id="letterBody"></div>
+            <p class="letter__sign" id="letterSign"></p>
+          </article>
+
+          <div class="letters__nav">
+            <button class="icon-btn" id="letterPrev" type="button" aria-label="Carta anterior">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="15 18 9 12 15 6"/></svg>
+            </button>
+            <div class="dots" id="letterDots"></div>
+            <button class="icon-btn" id="letterNext" type="button" aria-label="Próxima carta">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg>
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- ======================= CANTINHO DE NATAL 💚 ======================= -->
+      <section id="natal" class="section natal">
+        <div class="natal__card reveal">
+          <div class="natal__snow" aria-hidden="true"></div>
+          <div class="natal__media tilt" id="natalMedia">
+            <img id="natalImg" alt="Natal da Giovanna" hidden>
+            <div class="natal__ph" id="natalPh" aria-hidden="true">
+              <span class="natal__tree"><i></i><i></i><i></i><b></b></span>
+              <small>Espaço para a foto natalina da Giovanna 💚</small>
+            </div>
+          </div>
+          <div class="natal__text">
+            <p class="eyebrow natal__eyebrow">O cantinho da Giovanna</p>
+            <h2 class="natal__title" id="natalTitle"></h2>
+            <p class="natal__msg" id="natalMsg"></p>
+            <div class="natal__count">
+              <strong id="natalDays">0</strong>
+              <span id="natalLabel">dias para o nosso Natal</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ======================= 9. ACESSO À SURPRESA ======================= -->
+      <section id="final" class="section">
+        <div class="final__card reveal">
+          <p class="eyebrow">Última parada</p>
+          <h2 class="section-title">Ainda tem <em>uma coisa</em>…</h2>
+          <p class="section-lead" id="finalHint">Explore cada cantinho do nosso universo.</p>
+          <div class="progress-hearts" id="progressHearts" aria-hidden="true"></div>
+          <button class="btn btn--glow" id="surpriseBtn" type="button">Abrir a surpresa ✦</button>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <p>Feito por Cristian, com todo o amor do mundo — <em>só para a Giovanna</em>.</p>
+    </footer>
+
+    <!-- ======================= 8. PLAYER DE MÚSICA ======================= -->
+    <aside class="player" id="player" aria-label="Nossa trilha sonora">
+      <div class="player__panel" id="playlistPanel" hidden>
+        <p class="player__panel-title">Nossa trilha sonora</p>
+        <ol id="playlistList"></ol>
+      </div>
+      <div class="player__bar">
+        <div class="player__cover" id="trackCover" aria-hidden="true">
+          <img id="trackCoverImg" alt="">
+          <span class="player__vinyl"></span>
+        </div>
+        <div class="player__info">
+          <p class="player__now"><span class="eq" aria-hidden="true"><i></i><i></i><i></i><i></i></span><span id="trackState">Nossa trilha</span></p>
+          <p class="player__title" id="trackTitle">Nossa música</p>
+          <p class="player__artist" id="trackArtist"></p>
+          <div class="player__progress" id="trackSeek" role="slider" aria-label="Progresso da música" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" tabindex="0"><span id="trackProgress"></span></div>
+        </div>
+        <button class="player__btn" id="prevBtn" type="button" aria-label="Música anterior">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 6h2v12H7zM20 6v12l-9-6z"/></svg>
+        </button>
+        <button class="player__btn player__play" id="playBtn" type="button" aria-label="Tocar música">
+          <svg viewBox="0 0 100 92" aria-hidden="true">
+            <path class="ic-heart" d="M50 88C22 68 4 50 4 30 4 15 15 4 29 4c9 0 16 5 21 12 5-7 12-12 21-12 14 0 25 11 25 26 0 20-18 38-46 58z"/>
+            <path class="ic-play" d="M42 30l22 15-22 15z"/>
+            <g class="ic-pause"><rect x="38" y="30" width="8" height="30" rx="2"/><rect x="54" y="30" width="8" height="30" rx="2"/></g>
+          </svg>
+        </button>
+        <button class="player__btn" id="nextBtn" type="button" aria-label="Próxima música">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 6h2v12h-2zM4 6v12l9-6z"/></svg>
+        </button>
+        <button class="player__btn" id="listBtn" type="button" aria-label="Ver playlist" aria-expanded="false">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6h13v2H3zm0 5h13v2H3zm0 5h9v2H3zm16-9v8.2A3 3 0 1 0 21 18V9h2V7z"/></svg>
+        </button>
+      </div>
+      <audio id="audio" preload="none"></audio>
+    </aside>
+  </div>
+
+  <!-- ======================= LIGHTBOX ======================= -->
+  <div class="lightbox" id="lightbox" hidden role="dialog" aria-modal="true" aria-label="Foto ampliada">
+    <button class="icon-btn lightbox__close" id="lbClose" type="button" aria-label="Fechar">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
+    </button>
+    <button class="icon-btn lightbox__arrow lightbox__arrow--prev" id="lbPrev" type="button" aria-label="Foto anterior">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="15 18 9 12 15 6"/></svg>
+    </button>
+    <figure class="lightbox__stage" id="lbStage">
+      <div class="lightbox__frame" id="lbFrame"><img id="lbImg" alt=""><video id="lbVideo" playsinline controls preload="metadata" hidden></video></div>
+      <figcaption id="lbCaption"></figcaption>
+      <p class="lightbox__count" id="lbCount"></p>
+    </figure>
+    <button class="icon-btn lightbox__arrow lightbox__arrow--next" id="lbNext" type="button" aria-label="Próxima foto">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg>
+    </button>
+  </div>
+
+  <!-- ======================= 9. SURPRESA FINAL ======================= -->
+  <div class="surprise" id="surprise" hidden role="dialog" aria-modal="true" aria-label="Surpresa final">
+    <canvas id="bokeh" aria-hidden="true"></canvas>
+    <div class="surprise__rain" id="heartRain" aria-hidden="true"></div>
+    <button class="icon-btn surprise__close" id="surpriseClose" type="button" aria-label="Fechar surpresa">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
+    </button>
+    <div class="surprise__content">
+      <div class="surprise__photo">
+        <span class="surprise__ring" aria-hidden="true"></span>
+        <img id="surpriseImg" alt="Nós dois">
+      </div>
+      <p class="surprise__phrase" id="surprisePhrase"></p>
+      <p class="surprise__final" id="surpriseFinal"></p>
+      <p class="surprise__sign" id="surpriseSign"></p>
+      <button class="btn btn--ghost surprise__replay" id="surpriseReplay" type="button">Ver de novo</button>
+    </div>
+  </div>
+
+  <div class="toasts" id="toasts" aria-live="polite"></div>
+
+  <script src="script.js"></script>
+</body>
+</html>
