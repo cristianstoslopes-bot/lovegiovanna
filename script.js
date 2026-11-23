@@ -13,7 +13,7 @@ const CONFIG = {
 
   /* ---------- Acesso ---------- */
   SENHA_LOGIN: '23/09/2026',                 // aceita também "23092026"
-  DICA_SENHA: 'Dica: é o dia em que a gente completa 3 anos, Giovanna ✨',
+  DICA_SENHA: 'Dica: é o dia em que a gente começou a namorar, Giovanna ✨',
   LEMBRAR_ACESSO: true,                      // true = não pede a senha de novo neste aparelho (abra com #reset no fim do link para zerar)
 
   /* ---------- Abertura romântica (aparece logo depois da senha certa) ---------- */
@@ -28,7 +28,7 @@ const CONFIG = {
 
   /* ---------- Datas ---------- */
   // Use o formato AAAA-MM-DDTHH:MM:SS (com o "T") para respeitar o fuso do Brasil
-  DATA_INICIO_RELACIONAMENTO: '2023-09-23T00:00:00',
+  DATA_INICIO_RELACIONAMENTO: '2026-09-23T00:00:00',
 
   /* ---------- Home ---------- */
   FOTO_PRINCIPAL: { src: 'fotos/nos-1.jpg', legenda: 'Cristian & Giovanna ♥' },
@@ -58,12 +58,12 @@ const CONFIG = {
   /* ---------- Nossa História (linha do tempo) ---------- */
   // ✏️ Ajuste as datas e os textos para os momentos reais de vocês
   EVENTOS_HISTORIA: [
-    { data: '23 de setembro de 2023', titulo: 'O dia em que tudo começou', descricao: 'Giovanna, um “oi” despretensioso mudou a minha vida inteira. Eu ainda lembro do seu sorriso naquele dia.', img: 'fotos/giovanna-1.jpg' },
+    { data: '28 de junho de 2026', titulo: 'O dia em que tudo começou', descricao: 'Giovanna, foi ali que a nossa história começou. Eu ainda lembro do seu sorriso naquele dia — e de como eu não parava de pensar em você depois.', img: 'fotos/giovanna-1.jpg' },
     { data: 'Os primeiros encontros', titulo: 'Quando eu soube que era você', descricao: 'O nervosismo, a conversa que não acabava e a certeza silenciosa de que eu queria te ver de novo — e de novo.', img: 'fotos/nos-4.jpg' },
     { data: 'Noites de conversa', titulo: 'As risadas que viraram rotina', descricao: 'Aquelas noites em que a gente ria de tudo e o tempo simplesmente sumia. É com você que eu gosto de perder a hora.', img: 'fotos/juntinhos-1.jpg' },
+    { data: '23 de setembro de 2026', titulo: 'O dia em que viramos nós', descricao: 'A data mágica que abriu este site: o dia em que a gente começou a namorar. Desde então, cada dia ficou mais bonito.', img: 'fotos/nos-3.jpg' },
     { data: 'Todos os dias', titulo: 'Morrendo de saudade', descricao: 'Mesmo quando a gente acabou de se ver, a saudade aparece. É assim que eu sei o tamanho do que eu sinto.', img: 'fotos/nos-2.jpg' },
-    { data: '23 de setembro de 2026', titulo: 'Três anos de nós', descricao: 'A data mágica que abriu este site. Três anos de você, Giovanna — e eu quero muito mais.', img: 'fotos/nos-3.jpg' },
-    { data: 'Daqui pra frente', titulo: 'E todos os dias que virão', descricao: 'Nossa história ainda está no começo, e eu mal posso esperar para escrever cada capítulo com você.', img: 'fotos/juntinhos-2.jpg' },
+    { data: 'Daqui pra frente', titulo: 'E todos os dias que virão', descricao: 'Nossa história está só no começo, e eu mal posso esperar para escrever cada capítulo com você.', img: 'fotos/juntinhos-2.jpg' },
   ],
 
   /* ---------- Nossos Momentos (leque 3D) ---------- */
@@ -229,7 +229,7 @@ const CONFIG = {
   NATAL: {
     foto: '',
     titulo: 'Feliz Natal, minha Grinch favorita 💚',
-    texto: 'Eu sei que você ama o Grinch — e eu amo cada detalhe seu, até o seu lado “ranzinza” fofo. Este Natal (e todos os próximos) eu quero passar roubando os seus abraços.',
+    texto: 'Eu sei que você ama o Grinch — e eu amo cada detalhe seu, até o seu lado “ranzinza” fofo. Este vai ser o nosso primeiro Natal juntos — e eu quero passar ele (e todos os próximos) roubando os seus abraços.',
   },
 
   /* ---------- Surpresa final ---------- */
@@ -1426,7 +1426,7 @@ function initNatal() {
   if (now > new Date(now.getFullYear(), 11, 26)) xmas = new Date(now.getFullYear() + 1, 11, 25);
   const days = Math.ceil((xmas - new Date(now.getFullYear(), now.getMonth(), now.getDate())) / 864e5);
   $('#natalDays').textContent = Math.max(0, days);
-  $('#natalLabel').textContent = days <= 0 ? 'É Natal! Feliz Natal, meu amor 🎄' : days === 1 ? 'dia para o nosso Natal 🎄' : 'dias para o nosso Natal 🎄';
+  $('#natalLabel').textContent = days <= 0 ? 'É Natal! Feliz Natal, meu amor 🎄' : days === 1 ? 'dia para o nosso primeiro Natal juntos 🎄' : 'dias para o nosso primeiro Natal juntos 🎄';
 }
 
 /* ==========================================================================
